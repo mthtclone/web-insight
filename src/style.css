@@ -1,0 +1,319 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f6f8;
+    color: #202124;
+}
+
+.header {
+    height: 70px;
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.header-subtitle {
+    color: #777;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 40px 25px;
+}
+
+.hero {
+    background: white;
+    border-radius: 14px;
+    padding: 35px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.hero h1 {
+    margin: 0 0 10px;
+    font-size: 30px;
+}
+
+.hero p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.url-box {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.url-box input {
+    flex: 1;
+    padding: 14px 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+}
+
+.url-box input:focus {
+    border-color: #111;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#analyzeButton {
+    background: #111;
+    color: white;
+}
+
+#analyzeButton:hover,
+.primary-button:hover {
+    background: #333;
+}
+
+#status {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.badge {
+    background: #f0f0f0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #666;
+}
+
+.preview,
+.attention-preview {
+    min-height: 300px;
+    background: #f4f5f7;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.preview img,
+.attention-preview img {
+    width: 100%;
+    display: block;
+}
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.tab {
+    background: #eee;
+    color: #555;
+}
+
+.tab.active {
+    background: #111;
+    color: white;
+}
+
+.tab:hover {
+    background: #ddd;
+}
+
+.tab.active:hover {
+    background: #333;
+}
+
+.heatmap-placeholder,
+.overlay-placeholder {
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background:
+        radial-gradient(
+            circle at 50% 40%,
+            rgba(255, 80, 80, 0.35),
+            transparent 20%
+        ),
+        radial-gradient(
+            circle at 30% 60%,
+            rgba(255, 180, 0, 0.3),
+            transparent 18%
+        ),
+        #eef0f3;
+    color: #555;
+}
+
+.overlay-placeholder {
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.04),
+            rgba(0, 0, 0, 0.04)
+        ),
+        #eef0f3;
+}
+
+.analysis-grid,
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.analysis-item {
+    background: #f6f7f8;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.analysis-item span {
+    display: block;
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.analysis-item strong {
+    font-size: 25px;
+}
+
+.metric {
+    text-align: center;
+    padding: 25px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+}
+
+.metric span {
+    display: block;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.metric strong {
+    font-size: 28px;
+}
+
+.finding,
+.recommendation {
+    padding: 12px 15px;
+    background: #f6f7f8;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.empty {
+    color: #999;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin: 10px 0 40px;
+}
+
+.primary-button {
+    background: #111;
+    color: white;
+}
+
+.secondary-button {
+    background: #ddd;
+    color: #222;
+}
+
+.secondary-button:hover {
+    background: #ccc;
+}
+
+footer {
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+    padding: 25px;
+}
+
+@media (max-width: 800px) {
+    .analysis-grid,
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .url-box {
+        flex-direction: column;
+    }
+
+    .header {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    .analysis-grid,
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .header {
+        height: auto;
+        padding: 20px;
+        gap: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero {
+        padding: 25px;
+    }
+
+    .hero h1 {
+        font-size: 25px;
+    }
+}
+
