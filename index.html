@@ -1,214 +1,154 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/style.css" />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>UX Analyzer</title>
+  </head>
 
-    <link rel="stylesheet" href="/src/style.css">
-
-    <title>Visual Attention & UX Analyzer</title>
-
-</head>
-
-<body>
-
+  <body>
     <div id="website">
+      <header class="header">
+        <div class="header-line">
+          <p>Computer vision powered UX evaluation and recommendations</p>
+        </div>
+      </header>
 
-        <header class="header">
-            <div class="logo">Visual Attention & UX Analyzer</div>
-            <div class="header-subtitle">ML-Powered Website Analysis</div>
-        </header>
+      <main class="container">
+        <section class="hero">
+          <h1>Analyze a Website</h1>
+          <p>
+            Enter a website URL to analyze its visual attention and user
+            experience.
+          </p>
 
-        <main class="container">
+          <div class="url-box">
+            <input
+              id="websiteUrl"
+              type="text"
+              placeholder="https://example.com"
+            />
+            <button id="analyzeButton">Analyze Website</button>
+          </div>
 
-            <section class="hero">
-                <h1>Analyze a Website</h1>
-                <p>
-                    Enter a website URL to analyze its visual attention
-                    and user experience.
-                </p>
+          <p id="status"></p>
+        </section>
 
-                <div class="url-box">
-                    <input
-                        id="websiteUrl"
-                        type="text"
-                        placeholder="https://example.com"
-                    >
-                    <button id="analyzeButton">Analyze Website</button>
-                </div>
+        <section class="card">
+          <div class="section-header">
+            <h2>Website Preview</h2>
+            <span class="badge">Original</span>
+          </div>
 
-                <p id="status"></p>
-            </section>
+          <div id="websitePreview" class="preview">
+            <p>Website screenshot will appear here.</p>
+          </div>
+        </section>
 
+        <section class="card">
+          <div class="section-header">
+            <h2>Visual Attention</h2>
+          </div>
 
-            <section class="card">
+          <div class="tabs">
+            <button class="tab active" data-view="original">Original</button>
 
-                <div class="section-header">
-                    <h2>Website Preview</h2>
-                    <span class="badge">Original</span>
-                </div>
+            <button class="tab" data-view="heatmap">Heatmap</button>
 
-                <div id="websitePreview" class="preview">
-                    <p>Website screenshot will appear here.</p>
-                </div>
+            <button class="tab" data-view="overlay">Overlay</button>
+          </div>
 
-            </section>
+          <div id="attentionPreview" class="attention-preview">
+            <p>Attention analysis will appear here.</p>
+          </div>
+        </section>
 
+        <section class="card">
+          <h2>UI Element Analysis</h2>
 
-            <section class="card">
-
-                <div class="section-header">
-                    <h2>Visual Attention</h2>
-                </div>
-
-                <div class="tabs">
-                    <button class="tab active" data-view="original">
-                        Original
-                    </button>
-
-                    <button class="tab" data-view="heatmap">
-                        Heatmap
-                    </button>
-
-                    <button class="tab" data-view="overlay">
-                        Overlay
-                    </button>
-                </div>
-
-                <div id="attentionPreview" class="attention-preview">
-                    <p>Attention analysis will appear here.</p>
-                </div>
-
-            </section>
-
-
-            <section class="card">
-
-                <h2>UI Element Analysis</h2>
-
-                <div class="analysis-grid">
-
-                    <div class="analysis-item">
-                        <span>CTA Prominence</span>
-                        <strong id="ctaScore">-</strong>
-                    </div>
-
-                    <div class="analysis-item">
-                        <span>Headline Prominence</span>
-                        <strong id="headlineScore">-</strong>
-                    </div>
-
-                    <div class="analysis-item">
-                        <span>Visual Clutter</span>
-                        <strong id="clutterScore">-</strong>
-                    </div>
-
-                    <div class="analysis-item">
-                        <span>Text Density</span>
-                        <strong id="textScore">-</strong>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <section class="card">
-
-                <h2>UX Performance</h2>
-
-                <div class="metrics-grid">
-
-                    <div class="metric">
-                        <span>Overall UX</span>
-                        <strong id="uxScore">-</strong>
-                    </div>
-
-                    <div class="metric">
-                        <span>Visual Hierarchy</span>
-                        <strong id="hierarchyScore">-</strong>
-                    </div>
-
-                    <div class="metric">
-                        <span>CTA Visibility</span>
-                        <strong id="ctaVisibility">-</strong>
-                    </div>
-
-                    <div class="metric">
-                        <span>Above Fold Attention</span>
-                        <strong id="aboveFold">-</strong>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <section class="card">
-
-                <h2>Key Findings</h2>
-
-                <div id="findings">
-                    <p class="empty">
-                        Analysis findings will appear here.
-                    </p>
-                </div>
-
-            </section>
-
-
-            <section class="card">
-
-                <h2>Recommendations</h2>
-
-                <div id="recommendations">
-                    <p class="empty">
-                        Recommendations will appear here.
-                    </p>
-                </div>
-
-            </section>
-
-
-            <div class="actions">
-
-                <button
-                    id="newAnalysis"
-                    class="secondary-button"
-                >
-                    New Analysis
-                </button>
-
-                <button
-                    id="downloadReport"
-                    class="primary-button"
-                >
-                    Download Report
-                </button>
-
+          <div class="analysis-grid">
+            <div class="analysis-item">
+              <span>CTA Prominence</span>
+              <strong id="ctaScore">-</strong>
             </div>
 
-        </main>
+            <div class="analysis-item">
+              <span>Headline Prominence</span>
+              <strong id="headlineScore">-</strong>
+            </div>
 
+            <div class="analysis-item">
+              <span>Visual Clutter</span>
+              <strong id="clutterScore">-</strong>
+            </div>
 
-        <footer>
-            Developed by BCS student group
-        </footer>
+            <div class="analysis-item">
+              <span>Text Density</span>
+              <strong id="textScore">-</strong>
+            </div>
+          </div>
+        </section>
 
+        <section class="card">
+          <h2>UX Performance</h2>
+
+          <div class="metrics-grid">
+            <div class="metric">
+              <span>Overall UX</span>
+              <strong id="uxScore">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Visual Hierarchy</span>
+              <strong id="hierarchyScore">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>CTA Visibility</span>
+              <strong id="ctaVisibility">-</strong>
+            </div>
+
+            <div class="metric">
+              <span>Above Fold Attention</span>
+              <strong id="aboveFold">-</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Key Findings</h2>
+
+          <div id="findings">
+            <p class="empty">Analysis findings will appear here.</p>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Recommendations</h2>
+
+          <div id="recommendations">
+            <p class="empty">Recommendations will appear here.</p>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button id="newAnalysis" class="secondary-button">
+            New Analysis
+          </button>
+
+          <button id="downloadReport" class="primary-button">
+            Download Report
+          </button>
+        </div>
+      </main>
     </div>
 
-
-    <script
-        type="module"
-        src="/src/main.js"
-    ></script>
-
-</body>
-
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
-
