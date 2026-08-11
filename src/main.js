@@ -7,20 +7,50 @@ const statusMessage = document.querySelector("#status");
 analyzeButton.addEventListener("click", async () => {
   const url = websiteUrl.value.trim();
 
-  if (url === "") {
+  if (!url) {
     statusMessage.textContent = "Please enter a website URL.";
     return;
   }
 
   statusMessage.textContent = "Analyzing website...";
+  analyzeButton.disabled = true;
 
   try {
-    // Python backend connection will be added here later.
+    const response = await fetch("http://127.0.01:8000/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        url,
+      }),
+    });
 
-    statusMessage.textContent = "Backend connection is not available yet.";
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.detail || "Failed to analyze website.");
+    }
+
+    const imageBlob = await response.blob();
+    const imageUrl = URL.createObjectURL(imageBlob);
+
+    websitePreview.innerHTML = "";
+
+    const image = document.createElement("img");
+    image.src = imageUrl;
+    image.alt = "Website screenshot";
+
+    websitePreview.appendChild(image);
+
+    statusMessage.textContent = "Website analyzed successfully.";
   } catch (error) {
     console.error(error);
-    statusMessage.textContent = "Analysis failed.";
+    statusMessage.textContent = `Error: ${error.message}`;
+
+    websitePreview.innerHTML =
+      "<p> Unable to capture the website screenshot. </p>";
+  } finally {
+    analyzeButton.disabled = false;
   }
 });
 
