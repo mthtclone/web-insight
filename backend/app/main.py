@@ -9,7 +9,7 @@ if sys.platform == "win32":
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 
 
 from app.browser import capture_page
@@ -29,7 +29,7 @@ app.add_middleware(
 
 
 class AnalyzeRequest(BaseModel):
-    url: str
+    url: HttpUrl
 
 @app.post("/api/analyze")
 async def analyze_website(request: AnalyzeRequest):
@@ -42,7 +42,7 @@ async def analyze_website(request: AnalyzeRequest):
         print("WINDOWS:", sys.platform)
         print("===============")
         
-        screenshot = await capture_page(request.url)
+        screenshot = await capture_page(str(request.url))
 
         return Response(
             content=screenshot,
