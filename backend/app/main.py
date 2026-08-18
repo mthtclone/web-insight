@@ -9,8 +9,10 @@ if sys.platform == "win32":
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
-from pydantic import BaseModel, HttpUrl
-
+from .schemas import (
+    AnalyzeRequest,
+    AnalyzeResponse,
+)
 
 from app.browser import capture_page
 
@@ -27,11 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-class AnalyzeRequest(BaseModel):
-    url: HttpUrl
-
-@app.post("/api/analyze")
+@app.post("/api/analyze", response_model=AnalyzeResponse)
 async def analyze_website(request: AnalyzeRequest):
     try:
         loop = asyncio.get_running_loop()
