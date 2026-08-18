@@ -1,3 +1,4 @@
+import base64
 from pathlib import Path
 
 from playwright.async_api import (
@@ -44,6 +45,40 @@ async def capture_page(url: str) -> bytes:
                     animations="disabled",
                 )
 
+                html = await page.content()
+
+                elements = await page.evaluate(
+                    """
+                    () => {
+                    const tags = [
+                        "h1",
+                        "h2",
+                        "button",
+                        "a",
+                        "img",
+                        "input",
+                        "nav"
+                    ];
+
+                    return tags.flatMap(tag =>
+                        Array.from(document.querySelectorAll(tag))
+                            .map(element => {
+                                const rect = element.getBoundingClientRect();
+
+                                return {
+                                    tag: element.tagName.toLowerCase(),
+                                    text: element.innerText || "",
+                                    x: rect.x,
+                                    y: rect.y,
+                                    width: rect.width,
+                                    height: rect.height
+                                };
+                            })
+                    );
+                }
+                """
+                )
+
             except PlaywrightTimeoutError as error:
                 raise RuntimeError(
                     "The screenshot operation timed out."
@@ -54,7 +89,13 @@ async def capture_page(url: str) -> bytes:
                     f"Failed to capture the website screenshot: {error}"
                 ) from error
             
-            return screenshot
+            return {
+                "screenshot": base64.b64encode(
+                    screenshot
+                ).decode("utf-8"),
+                "html": html,
+                "elements": elements,
+            }
 
                 # print(f"Screenshot size: {len(screenshot)} bytes")
 

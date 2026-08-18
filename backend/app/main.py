@@ -42,12 +42,9 @@ async def analyze_website(request: AnalyzeRequest):
         print("WINDOWS:", sys.platform)
         print("===============")
         
-        screenshot = await capture_page(str(request.url))
+        result = await capture_page(str(request.url))
 
-        return Response(
-            content=screenshot,
-            media_type="image/png"
-        )
+        return result
 
     except Exception as error:
         print(f"Analysis error: {type(error).__name__}: {error}")

@@ -31,8 +31,8 @@ analyzeButton.addEventListener("click", async () => {
       throw new Error(error.detail || "Failed to analyze website.");
     }
 
-    const imageBlob = await response.blob();
-    const imageUrl = URL.createObjectURL(imageBlob);
+    const result = await response.json();
+    const imageUrl = `data:image/png;base64,${result.screenshot}`;
 
     websitePreview.innerHTML = "";
 
