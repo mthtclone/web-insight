@@ -13,8 +13,8 @@
 - [x] install pytouch + CV dependencies
 - [x] verify ML environment
 
-- [ ] Install DeepGaze dependencies
-- [ ] Download/load pretrained DeepGaze model
+- [x] Install DeepGaze dependencies
+- [x] Download/load pretrained DeepGaze model
 - [ ] Create screenshot preprocessing pipeline
 - [ ] Run first inference on saved webpage screenshot
 - [ ] Generate raw saliency map
