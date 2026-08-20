@@ -15,8 +15,8 @@
 
 - [x] Install DeepGaze dependencies
 - [x] Download/load pretrained DeepGaze model
-- [ ] Create screenshot preprocessing pipeline
-- [ ] Run first inference on saved webpage screenshot
+- [x] Create screenshot preprocessing pipeline
+- [x] Run first inference on saved webpage screenshot
 - [ ] Generate raw saliency map
 - [ ] Convert saliency map to heatmap with OpenCV
 - [ ] Overlay heatmap on webpage screenshot
