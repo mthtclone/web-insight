@@ -147,13 +147,13 @@ def forward(
 
 The required inputs are:
 
-| Input | Description |
-|---|---|
-| `x` | Input image tensor (webpage screenshot) |
+| Input        | Description                                      |
+| ------------ | ------------------------------------------------ |
+| `x`          | Input image tensor (webpage screenshot)          |
 | `centerbias` | Human viewing tendency bias toward image regions |
-| `x_hist` | Previous fixation x-coordinates |
-| `y_hist` | Previous fixation y-coordinates |
-| `durations` | Previous fixation durations |
+| `x_hist`     | Previous fixation x-coordinates                  |
+| `y_hist`     | Previous fixation y-coordinates                  |
+| `durations`  | Previous fixation durations                      |
 
 For the first version of this project, we only use:
 
@@ -323,12 +323,12 @@ torch.Size([1, 3, 900, 1440])
 
 Meaning:
 
-| Dimension | Meaning |
-|---|---|
-| 1 | Batch size |
-| 3 | RGB channels |
-| 900 | Image height |
-| 1440 | Image width |
+| Dimension | Meaning      |
+| --------- | ------------ |
+| 1         | Batch size   |
+| 3         | RGB channels |
+| 900       | Image height |
+| 1440      | Image width  |
 
 The tensor is moved to the GPU:
 
@@ -383,13 +383,13 @@ def forward(
 
 Required inputs:
 
-| Input | Description |
-|-|-|
-| x | Screenshot tensor |
-| centerbias | Human viewing bias map |
-| x_hist | Previous fixation x coordinates |
-| y_hist | Previous fixation y coordinates |
-| durations | Fixation durations |
+| Input      | Description                     |
+| ---------- | ------------------------------- |
+| x          | Screenshot tensor               |
+| centerbias | Human viewing bias map          |
+| x_hist     | Previous fixation x coordinates |
+| y_hist     | Previous fixation y coordinates |
+| durations  | Fixation durations              |
 
 ---
 
@@ -474,12 +474,12 @@ torch.Size([1, 1, 900, 1440])
 
 The dimensions represent:
 
-| Dimension | Meaning |
-|-|-|
-| 1 | Batch |
-| 1 | Saliency channel |
-| 900 | Height |
-| 1440 | Width |
+| Dimension | Meaning          |
+| --------- | ---------------- |
+| 1         | Batch            |
+| 1         | Saliency channel |
+| 900       | Height           |
+| 1440      | Width            |
 
 This is the raw saliency prediction.
 
@@ -504,5 +504,3 @@ Heatmap image
 ```
 
 ---
-
-

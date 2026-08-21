@@ -1,3 +1,6 @@
+from fastapi.responses import FileResponse
+from pathlib import Path
+
 import asyncio
 import sys
 
@@ -46,6 +49,38 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+OVERLAY_PATH = Path("data/overlay.png")
+
+@app.get("/api/overlay")
+async def get_overlay():
+
+    if not OVERLAY_PATH.exists():
+        raise HTTPException(
+            status_code=404,
+            detail="Overlay image not found"
+        )
+
+    return FileResponse(
+        OVERLAY_PATH,
+        media_type="image/png"
+    )
+
+SCREENSHOT_PATH = Path("data/screenshots/page.png")
+
+
+@app.get("/api/screenshot")
+async def get_screenshot():
+
+    if not SCREENSHOT_PATH.exists():
+        raise HTTPException(
+            status_code=404,
+            detail="Screenshot not found"
+        )
+
+    return FileResponse(
+        SCREENSHOT_PATH,
+        media_type="image/png"
+    )
 
 @app.post(
     "/api/analyze",
@@ -138,12 +173,9 @@ async def analyze_website(
         return {
 
             "elements": elements,
-
             "metrics": metrics,
-
             "recommendations": recommendations,
-
-            "overlay": overlay_path
+            "overlay": "/api/overlay"
 
         }
 

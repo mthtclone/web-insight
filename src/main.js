@@ -32,15 +32,47 @@ analyzeButton.addEventListener("click", async () => {
     }
 
     const result = await response.json();
-    const imageUrl = `data:image/png;base64,${result.screenshot}`;
+
+    // ORIGINAL SCREENSHOT
 
     websitePreview.innerHTML = "";
 
-    const image = document.createElement("img");
-    image.src = imageUrl;
-    image.alt = "Website screenshot";
+    const screenshot = document.createElement("img");
 
-    websitePreview.appendChild(image);
+    screenshot.src = "http://127.0.0.1:8000/api/screenshot";
+
+    screenshot.alt = "Website screenshot";
+
+    websitePreview.appendChild(screenshot);
+
+    // METRICS
+
+    document.querySelector("#uxScore").textContent =
+      result.metrics.overall_ux_score;
+
+    document.querySelector("#hierarchyScore").textContent =
+      result.metrics.visual_hierarchy;
+
+    document.querySelector("#ctaVisibility").textContent =
+      result.metrics.cta_visibility;
+
+    // RECOMMENDATIONS
+
+    const recommendationBox = document.querySelector("#recommendations");
+
+    recommendationBox.innerHTML = "";
+
+    result.recommendations.forEach((recommendation) => {
+      const p = document.createElement("p");
+
+      p.textContent = recommendation;
+
+      recommendationBox.appendChild(p);
+    });
+
+    // STORE OVERLAY URL
+
+    window.latestOverlay = "http://127.0.0.1:8000" + result.overlay;
 
     statusMessage.textContent = "Website analyzed successfully.";
   } catch (error) {
@@ -104,21 +136,21 @@ tabs.forEach((tab) => {
     const view = tab.dataset.view;
 
     if (view === "original") {
-      attentionPreview.innerHTML = "<p>Original website view.</p>";
-    } else if (view === "heatmap") {
-      attentionPreview.innerHTML = `
-                <div class="heatmap-placeholder">
-                    <strong>Heatmap</strong>
-                    <span>ML attention visualization will appear here.</span>
-                </div>
-            `;
+      attentionPreview.innerHTML = "";
+
+      const image = document.createElement("img");
+
+      image.src = "http://127.0.0.1:8000/api/screenshot";
+
+      attentionPreview.appendChild(image);
     } else if (view === "overlay") {
-      attentionPreview.innerHTML = `
-                <div class="overlay-placeholder">
-                    <strong>Attention Overlay</strong>
-                    <span>Attention areas will be displayed here.</span>
-                </div>
-            `;
-    }
+      attentionPreview.innerHTML = "";
+
+      const image = document.createElement("img");
+
+      image.src = window.latestOverlay;
+
+      attentionPreview.appendChild(image);
+    } 
   });
 });

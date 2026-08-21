@@ -1,4 +1,3 @@
-
 - [x] improve URL validation
 - [x] improve playwright error handling
 - [x] add a sensible page-load strategy
