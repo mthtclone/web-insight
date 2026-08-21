@@ -56,6 +56,18 @@ analyzeButton.addEventListener("click", async () => {
     document.querySelector("#ctaVisibility").textContent =
       result.metrics.cta_visibility;
 
+    document.querySelector("#ctaScore").textContent =
+      result.ui_metrics.cta_prominence;
+
+    document.querySelector("#headlineScore").textContent =
+      result.ui_metrics.headline_prominence;
+
+    document.querySelector("#clutterScore").textContent =
+      result.ui_metrics.visual_clutter;
+
+    document.querySelector("#textScore").textContent =
+      result.ui_metrics.text_density;
+
     // RECOMMENDATIONS
 
     const recommendationBox = document.querySelector("#recommendations");
@@ -68,6 +80,18 @@ analyzeButton.addEventListener("click", async () => {
       p.textContent = recommendation;
 
       recommendationBox.appendChild(p);
+    });
+
+    const findingsBox = document.querySelector("#findings");
+
+    findingsBox.innerHTML = "";
+
+    result.findings.forEach((finding) => {
+      const p = document.createElement("p");
+
+      p.textContent = finding;
+
+      findingsBox.appendChild(p);
     });
 
     // STORE OVERLAY URL
@@ -151,6 +175,6 @@ tabs.forEach((tab) => {
       image.src = window.latestOverlay;
 
       attentionPreview.appendChild(image);
-    } 
+    }
   });
 });

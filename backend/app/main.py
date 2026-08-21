@@ -29,6 +29,8 @@ from ml.analysis import (
     detect_cta_elements,
     generate_ux_metrics,
     generate_recommendations,
+    generate_ui_metrics,
+    generate_findings
 )
 
 
@@ -153,6 +155,10 @@ async def analyze_website(
             elements
         )
 
+        ui_metrics = generate_ui_metrics(
+            elements
+        )
+
 
         # 4. Generate UX metrics
 
@@ -169,11 +175,17 @@ async def analyze_website(
             )
         )
 
+        findings = generate_findings(
+            metrics
+        )
+
 
         return {
 
             "elements": elements,
             "metrics": metrics,
+            "ui_metrics": ui_metrics,
+            "findings": findings,
             "recommendations": recommendations,
             "overlay": "/api/overlay"
 

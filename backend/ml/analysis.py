@@ -348,3 +348,163 @@ def generate_recommendations(
 
 
     return recommendations
+
+def generate_ui_metrics(
+    elements: list
+):
+
+    metrics = {
+        "cta_prominence": 0,
+        "headline_prominence": 0,
+        "visual_clutter": 0,
+        "text_density": 0,
+    }
+
+
+    if not elements:
+        return metrics
+
+
+    # CTA prominence
+
+    ctas = [
+        element
+        for element in elements
+        if element.get("is_cta")
+    ]
+
+    if ctas:
+        metrics["cta_prominence"] = round(
+            max(
+                cta["attention_percentage"]
+                for cta in ctas
+            ),
+            2
+        )
+
+
+    # Headline prominence
+
+    headlines = [
+        element
+        for element in elements
+        if element["tag"] in [
+            "h1",
+            "h2"
+        ]
+    ]
+
+
+    if headlines:
+        metrics["headline_prominence"] = round(
+            max(
+                headline["attention_percentage"]
+                for headline in headlines
+            ),
+            2
+        )
+
+
+    # Visual clutter
+
+    element_count = len(elements)
+
+
+    metrics["visual_clutter"] = round(
+        min(
+            element_count * 5,
+            100
+        ),
+        2
+    )
+
+
+    # Text density
+
+    total_text_length = sum(
+        len(
+            element.get(
+                "text",
+                ""
+            )
+        )
+        for element in elements
+    )
+
+
+    metrics["text_density"] = round(
+        min(
+            total_text_length / 10,
+            100
+        ),
+        2
+    )
+
+
+    return metrics
+
+def generate_findings(
+    metrics: dict
+):
+
+    findings = []
+
+
+    # CTA
+
+    if metrics["cta_visibility"] >= 75:
+
+        findings.append(
+            "The primary CTA receives strong visual attention."
+        )
+
+    elif metrics["cta_visibility"] >= 50:
+
+        findings.append(
+            "The primary CTA receives moderate visual attention."
+        )
+
+    else:
+
+        findings.append(
+            "The primary CTA receives low visual attention."
+        )
+
+
+    # Headline
+
+    if metrics["headline_prominence"] >= 75:
+
+        findings.append(
+            "The main headline is visually prominent."
+        )
+
+    elif metrics["headline_prominence"] >= 50:
+
+        findings.append(
+            "The main headline has reasonable visibility."
+        )
+
+    else:
+
+        findings.append(
+            "The main headline does not strongly attract attention."
+        )
+
+
+    # Hierarchy
+
+    if metrics["visual_hierarchy"] >= 50:
+
+        findings.append(
+            "The webpage has a clear visual attention hierarchy."
+        )
+
+    else:
+
+        findings.append(
+            "The webpage has weak visual hierarchy between elements."
+        )
+
+
+    return findings

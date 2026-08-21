@@ -40,6 +40,10 @@ class AnalyzeResponse(BaseModel):
 
     metrics: UXMetrics
 
+    ui_metrics: dict
+
+    findings: list[str]
+    
     recommendations: list[str]
 
     overlay: str
