@@ -17,8 +17,8 @@
 - [x] Download/load pretrained DeepGaze model
 - [x] Create screenshot preprocessing pipeline
 - [x] Run first inference on saved webpage screenshot
-- [ ] Generate raw saliency map
-- [ ] Convert saliency map to heatmap with OpenCV
-- [ ] Overlay heatmap on webpage screenshot
+- [x] Generate raw saliency map
+- [x] Convert saliency map to heatmap with OpenCV
+- [x] Overlay heatmap on webpage screenshot
 - [ ] Return heatmap image from FastAPI
 - [ ] Display heatmap in frontend
