@@ -1,4 +1,7 @@
 import torch
+import numpy as np
+from PIL import Image
+import cv2
 
 from deepgaze_pytorch.deepgaze3 import DeepGazeIII
 
@@ -79,6 +82,70 @@ def main():
             y_hist=y_hist
         )
 
+        # Remove unnecessary dimensions (1,1,900,1440) -> (900,1440)
+        saliency = saliency.squeeze()
+
+        print("Processed saliency shape:")
+        print(saliency.shape)
+
+        # CPU numpy
+
+        saliency_np = saliency.cpu().numpy()
+        print(type(saliency_np))
+        print(saliency_np.shape)
+
+
+        # Normalize saliency values (log probability map)
+
+        saliency_min = saliency_np.min()
+        saliency_max = saliency_np.max()
+
+        saliency_norm = (
+            saliency_np - saliency_min
+        ) / (
+            saliency_max - saliency_min
+        )
+
+        saliency_image = (
+            saliency_norm * 255
+        ).astype(np.uint8)
+
+
+        Image.fromarray(
+            saliency_image
+        ).save(
+            "data/saliency_raw.png"
+        )
+
+        heatmap = cv2.applyColorMap(
+            saliency_image,
+            cv2.COLORMAP_JET
+        )
+
+        screenshot = cv2.imread(
+            "data/screenshots/page.png"
+        )
+
+        cv2.imwrite(
+            "data/heatmap.png",
+            heatmap
+        )
+
+        print("Screenshot:", screenshot.shape)
+        print("Heatmap:", heatmap.shape)
+
+        overlay = cv2.addWeighted(
+            screenshot,
+            0.6,
+            heatmap,
+            0.4,
+            0
+        )
+
+        cv2.imwrite(
+            "data/overlay.png",
+            overlay
+        )
 
     print("Inference complete")
 
