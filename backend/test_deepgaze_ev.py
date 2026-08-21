@@ -5,14 +5,19 @@ def main():
 
     analyzer = SaliencyAnalyzer()
 
-    output = analyzer.generate_overlay(
+    result = analyzer.generate_overlay(
         "data/screenshots/page.png",
         "data/overlay_test.png"
     )
 
     print(
-        "Generated:",
-        output
+        "Overlay:",
+        result["overlay_path"]
+    )
+
+    print(
+        "Saliency shape:",
+        result["saliency_map"].shape
     )
 
 

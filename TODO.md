@@ -20,5 +20,12 @@
 - [x] Generate raw saliency map
 - [x] Convert saliency map to heatmap with OpenCV
 - [x] Overlay heatmap on webpage screenshot
-- [ ] Return heatmap image from FastAPI
-- [ ] Display heatmap in frontend
+- [x] Return heatmap image from FastAPI
+- [x] Display heatmap in frontend
+
+- [x] Map saliency values to DOM bounding boxes
+- [x] Calculate attention score per element
+- [x] Rank important webpage elements
+- [x] Detect CTA elements
+- [x] Generate UX metrics
+- [x] Create recommendation rules

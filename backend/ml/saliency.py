@@ -148,4 +148,7 @@ class SaliencyAnalyzer:
         )
 
 
-        return output_path
+        return {
+            "overlay_path": output_path,
+            "saliency_map": saliency_np,
+        }
