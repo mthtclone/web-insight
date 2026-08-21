@@ -1,17 +1,15 @@
 import asyncio
 import sys
 
-from fastapi.responses import FileResponse
-from ml.saliency import SaliencyAnalyzer
-
 if sys.platform == "win32":
     asyncio.set_event_loop_policy(
         asyncio.WindowsProactorEventLoopPolicy()
     )
 
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+
 from .schemas import (
     AnalyzeRequest,
     AnalyzeResponse,
@@ -19,8 +17,23 @@ from .schemas import (
 
 from app.browser import capture_page
 
+from ml.saliency import SaliencyAnalyzer
+
+from ml.analysis import (
+    calculate_element_attention,
+    normalize_attention_scores,
+    rank_elements,
+    detect_cta_elements,
+    generate_ux_metrics,
+    generate_recommendations,
+)
+
+
 app = FastAPI()
+
+
 saliency_analyzer = SaliencyAnalyzer()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -33,31 +46,113 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/api/analyze", response_model=AnalyzeResponse)
-async def analyze_website(request: AnalyzeRequest):
+
+@app.post(
+    "/api/analyze",
+    response_model=AnalyzeResponse
+)
+async def analyze_website(
+    request: AnalyzeRequest
+):
+
     try:
-        loop = asyncio.get_running_loop()
 
         print("===============")
-        print("EVENT LOOP:", type(loop))
-        print("LOOP POLICY", type(asyncio.get_event_loop))
-        print("WINDOWS:", sys.platform)
+        print("Starting analysis")
         print("===============")
-        
-        result = await capture_page(str(request.url))
 
-        overlay_path = saliency_analyzer.generate_overlay(
-            result["screenshot_path"],
-            "data/overlay.png"
+
+        # 1. Capture webpage
+
+        result = await capture_page(
+            str(request.url)
         )
-        
-        return FileResponse(
-            overlay_path,
-            media_type="image/png"
+
+
+        screenshot_path = result[
+            "screenshot_path"
+        ]
+
+        elements = result[
+            "elements"
+        ]
+
+
+        # 2. Generate saliency map + overlay
+
+        saliency_map = (
+            saliency_analyzer.generate_saliency(
+                result["screenshot_path"]
+            )
         )
+
+
+        overlay_path = (
+            saliency_analyzer.generate_overlay(
+                result["screenshot_path"],
+                saliency_map,
+                "data/overlay.png"
+            )
+        )
+
+
+        # 3. Analyze DOM elements
+
+        elements = calculate_element_attention(
+            saliency_map,
+            elements
+        )
+
+
+        elements = normalize_attention_scores(
+            elements
+        )
+
+
+        elements = rank_elements(
+            elements
+        )
+
+
+        elements = detect_cta_elements(
+            elements
+        )
+
+
+        # 4. Generate UX metrics
+
+        metrics = generate_ux_metrics(
+            elements
+        )
+
+
+        # 5. Generate recommendations
+
+        recommendations = (
+            generate_recommendations(
+                metrics
+            )
+        )
+
+
+        return {
+
+            "elements": elements,
+
+            "metrics": metrics,
+
+            "recommendations": recommendations,
+
+            "overlay": overlay_path
+
+        }
+
 
     except Exception as error:
-        print(f"Analysis error: {type(error).__name__}: {error}")
+
+        print(
+            f"Analysis error: {type(error).__name__}: {error}"
+        )
 
         raise HTTPException(
             status_code=400,

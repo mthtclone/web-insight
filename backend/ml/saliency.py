@@ -40,10 +40,9 @@ class SaliencyAnalyzer:
         )
 
 
-    def generate_overlay(
+    def generate_saliency(
         self,
-        screenshot_path: str,
-        output_path: str
+        screenshot_path: str
     ):
 
         image = preprocess_image(
@@ -99,19 +98,28 @@ class SaliencyAnalyzer:
         saliency = saliency.squeeze()
 
 
-        saliency_np = (
+        return (
             saliency
             .cpu()
             .numpy()
         )
 
 
+
+    def generate_overlay(
+        self,
+        screenshot_path: str,
+        saliency_map: np.ndarray,
+        output_path: str
+    ):
+
+
         saliency_norm = (
-            saliency_np - saliency_np.min()
+            saliency_map - saliency_map.min()
         ) / (
-            saliency_np.max()
+            saliency_map.max()
             -
-            saliency_np.min()
+            saliency_map.min()
         )
 
 
@@ -148,7 +156,4 @@ class SaliencyAnalyzer:
         )
 
 
-        return {
-            "overlay_path": output_path,
-            "saliency_map": saliency_np,
-        }
+        return output_path

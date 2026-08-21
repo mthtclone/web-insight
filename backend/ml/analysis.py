@@ -48,8 +48,15 @@ def calculate_element_attention(
             score = 0
 
         else:
+            # DeepGaze outputs log probabilities.
+            # Convert them back into probabilities.
+
+            probability_region = np.exp(
+                region
+            )
+
             score = float(
-                region.mean()
+                probability_region.mean()
             )
 
 
@@ -89,6 +96,8 @@ def normalize_attention_scores(
             element["attention_score"]
             /
             max_score
+            if max_score > 0
+            else 0
         )
 
 
