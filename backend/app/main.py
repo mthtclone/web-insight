@@ -1,6 +1,9 @@
 import asyncio
 import sys
 
+from fastapi.responses import FileResponse
+from ml.saliency import SaliencyAnalyzer
+
 if sys.platform == "win32":
     asyncio.set_event_loop_policy(
         asyncio.WindowsProactorEventLoopPolicy()
@@ -17,6 +20,7 @@ from .schemas import (
 from app.browser import capture_page
 
 app = FastAPI()
+saliency_analyzer = SaliencyAnalyzer()
 
 app.add_middleware(
     CORSMiddleware,
@@ -42,7 +46,15 @@ async def analyze_website(request: AnalyzeRequest):
         
         result = await capture_page(str(request.url))
 
-        return result
+        overlay_path = saliency_analyzer.generate_overlay(
+            result["screenshot_path"],
+            "data/overlay.png"
+        )
+        
+        return FileResponse(
+            overlay_path,
+            media_type="image/png"
+        )
 
     except Exception as error:
         print(f"Analysis error: {type(error).__name__}: {error}")

@@ -8,19 +8,25 @@ from playwright.async_api import (
 )
 
 
-# SCREENSHOTS_DIR = Path("data/screenshots")
-# PAGES_DIR = Path("data/pages")
+SCREENSHOTS_DIR = Path("data/screenshots")
 
-async def capture_page(url: str) -> bytes:
-    # SCREENSHOTS_DIR.mkdir(parents=True, exist_ok=True)
-    # PAGES_DIR.mkdir(parents=True, exist_ok=True)
+
+async def capture_page(url: str) -> dict:
+
+    SCREENSHOTS_DIR.mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
     async with async_playwright() as playwright:
         browser = await playwright.chromium.launch()
 
         page = await browser.new_page(
-            viewport={"width": 1440, "height": 900},
-            device_scale_factor=1, # this gives us a predictable relationship between CSS pixels and screenshot pixels
+            viewport={
+                "width": 1440,
+                "height": 900
+            },
+            device_scale_factor=1,
         )
 
         try:
@@ -35,90 +41,109 @@ async def capture_page(url: str) -> bytes:
                 timeout=30_000,
             )
 
-            await page.wait_for_timeout(2_000)
+            await page.wait_for_timeout(
+                2_000
+            )
+
 
             try:
-                screenshot =  await page.screenshot(
-                    # path=SCREENSHOTS_DIR / "page.png",
+                screenshot_path = (
+                    SCREENSHOTS_DIR / "page.png"
+                )
+
+                screenshot = await page.screenshot(
+                    path=screenshot_path,
                     full_page=True,
                     type="png",
                     animations="disabled",
                 )
 
+
                 html = await page.content()
+
 
                 elements = await page.evaluate(
                     """
                     () => {
-                    const tags = [
-                        "h1",
-                        "h2",
-                        "button",
-                        "a",
-                        "img",
-                        "input",
-                        "nav"
-                    ];
+                        const tags = [
+                            "h1",
+                            "h2",
+                            "button",
+                            "a",
+                            "img",
+                            "input",
+                            "nav"
+                        ];
 
-                    return tags.flatMap(tag =>
-                        Array.from(document.querySelectorAll(tag))
+                        return tags.flatMap(tag =>
+                            Array.from(
+                                document.querySelectorAll(tag)
+                            )
                             .map(element => {
-                                const rect = element.getBoundingClientRect();
+
+                                const rect =
+                                    element.getBoundingClientRect();
 
                                 return {
-                                    tag: element.tagName.toLowerCase(),
-                                    text: element.innerText || "",
+                                    tag:
+                                        element.tagName
+                                        .toLowerCase(),
+
+                                    text:
+                                        element.innerText
+                                        || "",
+
                                     x: rect.x,
                                     y: rect.y,
                                     width: rect.width,
                                     height: rect.height
                                 };
                             })
-                    );
-                }
-                """
+                        );
+                    }
+                    """
                 )
+
 
             except PlaywrightTimeoutError as error:
                 raise RuntimeError(
                     "The screenshot operation timed out."
                 ) from error
-            
+
+
             except PlaywrightError as error:
                 raise RuntimeError(
                     f"Failed to capture the website screenshot: {error}"
                 ) from error
-            
+
+
+
             return {
                 "screenshot": base64.b64encode(
                     screenshot
                 ).decode("utf-8"),
+
+                "screenshot_path": str(
+                    screenshot_path
+                ),
+
                 "html": html,
+
                 "elements": elements,
             }
 
-                # print(f"Screenshot size: {len(screenshot)} bytes")
 
-                # html = await page.content()
-
-                # (PAGES_DIR / "page.html").write_text(
-                #     html,
-                #     encoding="utf-8"
-                # )
-
-                # print(f"Successfully captured: {url}")
-                # print(f"Screenshot: {SCREENSHOTS_DIR / 'page.png'}")
-                # print(f"HTML: {PAGES_DIR / 'page.html'}")
-        
         except PlaywrightTimeoutError as error:
             raise RuntimeError(
-                "The website took too long to read."
+                "The website took too long to load."
             ) from error
+
 
         except Exception as error:
             raise RuntimeError(
                 f"Playwright failed to load the website: {error}"
             ) from error
+
 
         finally:
             await browser.close()
