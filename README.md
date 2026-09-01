@@ -90,3 +90,64 @@ The output is a saliency map representing areas where users are most likely to f
 The saliency information is then mapped to webpage elements to measure how effectively the design guides user attention.
 
 ---
+
+## Changelog
+
+### Extended Findings and Recommendations Rules
+
+### Findings
+Added CTA attention analysis:
+- Detects strong, moderate, or weak CTA visibility.
+- Identifies whether the CTA receives enough user attention.
+
+Added headline prominence analysis:
+- Evaluates whether the main headline successfully attracts attention.
+- Detects when the headline is competing with other elements.
+
+Added visual hierarchy analysis:
+- Measures whether important and secondary elements have clear attention differences.
+- Detects weak or unclear hierarchy.
+
+Added overall attention distribution analysis:
+- Evaluates whether the webpage guides users effectively.
+- Detects poor attention patterns.
+
+Added attention competition analysis:
+- Detects when too many elements receive high attention.
+- Identifies potential user distraction.
+
+Added CTA priority analysis:
+- Checks whether the CTA is the strongest attention target.
+- Detects when users may focus on unintended elements.
+
+Added low-attention element analysis:
+- Identifies elements that receive very little attention.
+- Detects potentially overlooked content.
+
+### Recommendations
+
+Added CTA improvement recommendations:
+- Suggests increasing size, contrast, spacing, or placement when CTA attention is low.
+- Suggests strengthening CTA emphasis when visibility is moderate.
+
+Added headline improvement recommendations:
+- Suggests improving typography, contrast, and positioning.
+- Recommends reducing distractions around important messaging.
+
+Added visual hierarchy recommendations:
+- Suggests improving size, spacing, contrast, and prioritization between elements.
+- Recommends reducing competition between important and secondary content.
+
+Added overall UX improvement recommendations:
+- Suggests restructuring layouts with poor attention distribution.
+- Encourages stronger user attention flow.
+
+Added attention competition recommendations:
+- Suggests simplifying layouts when too many elements compete for attention.
+- Suggests creating stronger visual anchors when no element stands out.
+
+Added CTA prioritization recommendations:
+- Detects when CTA is not the main visual focus.
+Suggests redesigning CTA emphasis and placement.
+- Added balanced UX feedback:
+Provides positive feedback when attention distribution is effective.

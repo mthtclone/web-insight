@@ -298,52 +298,154 @@ def generate_ux_metrics(
     return metrics
 
 def generate_recommendations(
-    metrics: dict
+    metrics: dict,
+    elements: list
 ):
 
     recommendations = []
 
+    cta_visibility = metrics.get(
+        "cta_visibility",
+        0
+    )
 
-    # CTA
 
-    if metrics["cta_visibility"] < 50:
+    if cta_visibility < 40:
+
         recommendations.append(
-            "Primary CTA receives low visual attention. Consider increasing size, contrast, or improving placement."
+            "Primary CTA receives very low visual attention. Consider increasing button size, improving color contrast, and moving it to a more prominent location."
         )
 
-    elif metrics["cta_visibility"] < 75:
+    elif cta_visibility < 70:
+
         recommendations.append(
-            "CTA visibility is moderate. Consider making the action more visually prominent."
+            "CTA visibility is moderate. Consider strengthening visual emphasis through spacing, contrast, typography, or placement improvements."
         )
 
+    headline_prominence = metrics.get(
+        "headline_prominence",
+        0
+    )
 
-    # Headline
 
-    if metrics["headline_prominence"] < 50:
+    if headline_prominence < 40:
+
         recommendations.append(
-            "Main headline is not attracting enough attention. Consider improving typography and positioning."
+            "The main headline is not attracting enough attention. Consider increasing font size, improving contrast, and positioning it closer to the user's initial viewing area."
         )
 
+    elif headline_prominence < 70:
 
-    # Visual hierarchy
-
-    if metrics["visual_hierarchy"] < 30:
         recommendations.append(
-            "Visual hierarchy is weak. Important elements may not stand out clearly from secondary content."
+            "The headline has reasonable visibility but may compete with other elements. Consider reducing distractions around the main message."
         )
 
+    hierarchy = metrics.get(
+        "visual_hierarchy",
+        0
+    )
 
-    # Overall score
 
-    if metrics["overall_ux_score"] < 50:
+    if hierarchy < 25:
+
         recommendations.append(
-            "Overall visual attention distribution is poor. Review layout structure and element prioritization."
+            "Visual hierarchy is weak. Create stronger differences between primary and secondary elements using size, spacing, contrast, and positioning."
         )
 
+    elif hierarchy < 50:
+
+        recommendations.append(
+            "Visual hierarchy can be improved. Consider emphasizing important information while reducing attention given to less important elements."
+        )
+
+    overall_score = metrics.get(
+        "overall_ux_score",
+        0
+    )
+
+
+    if overall_score < 40:
+
+        recommendations.append(
+            "The webpage has poor attention distribution. Consider restructuring the layout to guide users toward important content and actions."
+        )
+
+    elif overall_score < 70:
+
+        recommendations.append(
+            "The webpage has acceptable usability but could benefit from improved attention flow and stronger prioritization of key elements."
+        )
+
+    if elements:
+
+        high_attention_elements = [
+            element
+            for element in elements
+            if element.get(
+                "attention_percentage",
+                0
+            ) >= 80
+        ]
+
+
+        if len(high_attention_elements) > 5:
+
+            recommendations.append(
+                "Many elements compete for user attention. Consider simplifying the layout and reducing unnecessary visual emphasis."
+            )
+
+
+        elif len(high_attention_elements) == 0:
+
+            recommendations.append(
+                "No element strongly attracts attention. Consider introducing stronger visual anchors for important content."
+            )
+
+
+    if elements:
+
+        ctas = [
+            element
+            for element in elements
+            if element.get(
+                "is_cta",
+                False
+            )
+        ]
+
+
+        if ctas:
+
+            highest_attention = max(
+                elements,
+                key=lambda x:
+                    x.get(
+                        "attention_percentage",
+                        0
+                    )
+            )
+
+
+            highest_cta = max(
+                ctas,
+                key=lambda x:
+                    x.get(
+                        "attention_percentage",
+                        0
+                    )
+            )
+
+
+            if highest_attention != highest_cta:
+
+                recommendations.append(
+                    "Users may focus on elements other than the primary action. Consider redesigning the CTA to become the strongest visual focus."
+                )
 
     if not recommendations:
+
         recommendations.append(
-            "The webpage has a balanced visual attention pattern."
+            "The webpage has a balanced attention pattern. Continue maintaining clear hierarchy and strong element prioritization."
         )
 
 
@@ -444,67 +546,196 @@ def generate_ui_metrics(
     return metrics
 
 def generate_findings(
-    metrics: dict
+    metrics: dict,
+    elements: list
 ):
 
     findings = []
 
+    cta_visibility = metrics.get(
+        "cta_visibility",
+        0
+    )
 
-    # CTA
 
-    if metrics["cta_visibility"] >= 75:
+    if cta_visibility >= 80:
 
         findings.append(
-            "The primary CTA receives strong visual attention."
+            "The primary CTA receives strong visual attention and is likely easy for users to notice."
         )
 
-    elif metrics["cta_visibility"] >= 50:
+    elif cta_visibility >= 50:
 
         findings.append(
-            "The primary CTA receives moderate visual attention."
-        )
-
-    else:
-
-        findings.append(
-            "The primary CTA receives low visual attention."
-        )
-
-
-    # Headline
-
-    if metrics["headline_prominence"] >= 75:
-
-        findings.append(
-            "The main headline is visually prominent."
-        )
-
-    elif metrics["headline_prominence"] >= 50:
-
-        findings.append(
-            "The main headline has reasonable visibility."
+            "The primary CTA receives moderate attention but may benefit from stronger visual emphasis."
         )
 
     else:
 
         findings.append(
-            "The main headline does not strongly attract attention."
+            "The primary CTA receives limited visual attention and may be overlooked by users."
         )
 
+    headline_prominence = metrics.get(
+        "headline_prominence",
+        0
+    )
 
-    # Hierarchy
 
-    if metrics["visual_hierarchy"] >= 50:
+    if headline_prominence >= 80:
 
         findings.append(
-            "The webpage has a clear visual attention hierarchy."
+            "The main headline successfully captures user attention and establishes strong visual focus."
+        )
+
+    elif headline_prominence >= 50:
+
+        findings.append(
+            "The main headline is visible but may compete with other webpage elements."
         )
 
     else:
 
         findings.append(
-            "The webpage has weak visual hierarchy between elements."
+            "The main headline does not attract sufficient attention to effectively communicate the primary message."
         )
+
+    hierarchy = metrics.get(
+        "visual_hierarchy",
+        0
+    )
+
+
+    if hierarchy >= 60:
+
+        findings.append(
+            "The webpage demonstrates a strong visual hierarchy, with clear differences between important and secondary elements."
+        )
+
+    elif hierarchy >= 30:
+
+        findings.append(
+            "The webpage has a moderate visual hierarchy, but some elements may compete for user attention."
+        )
+
+    else:
+
+        findings.append(
+            "The webpage has weak visual hierarchy, making it harder for users to identify important information."
+        )
+
+    overall_score = metrics.get(
+        "overall_ux_score",
+        0
+    )
+
+
+    if overall_score >= 80:
+
+        findings.append(
+            "The webpage has an effective attention distribution that supports user navigation."
+        )
+
+    elif overall_score >= 50:
+
+        findings.append(
+            "The webpage has an acceptable attention pattern but contains opportunities for visual improvement."
+        )
+
+    else:
+
+        findings.append(
+            "The webpage has poor attention distribution and may require layout improvements."
+        )
+
+    if elements:
+
+        high_attention_elements = [
+            element
+            for element in elements
+            if element.get(
+                "attention_percentage",
+                0
+            ) >= 80
+        ]
+
+
+        if len(high_attention_elements) > 5:
+
+            findings.append(
+                "Multiple elements receive high visual attention, which may reduce focus on the most important actions."
+            )
+
+
+        elif len(high_attention_elements) == 1:
+
+            findings.append(
+                "The webpage has a clear primary attention target."
+            )
+
+    if elements:
+
+        ctas = [
+            element
+            for element in elements
+            if element.get(
+                "is_cta",
+                False
+            )
+        ]
+
+
+        if ctas:
+
+            highest_cta = max(
+                ctas,
+                key=lambda x:
+                    x.get(
+                        "attention_percentage",
+                        0
+                    )
+            )
+
+
+            highest_element = max(
+                elements,
+                key=lambda x:
+                    x.get(
+                        "attention_percentage",
+                        0
+                    )
+            )
+
+
+            if highest_cta != highest_element:
+
+                findings.append(
+                    "The highest-attention element is not the primary CTA, which may indicate users are being distracted from the intended action."
+                )
+
+            else:
+
+                findings.append(
+                    "The primary CTA aligns with the strongest visual attention area."
+                )
+
+    if elements:
+
+        low_attention_elements = [
+            element
+            for element in elements
+            if element.get(
+                "attention_percentage",
+                0
+            ) < 20
+        ]
+
+
+        if len(low_attention_elements) > 3:
+
+            findings.append(
+                "Several webpage elements receive very low attention and may not effectively communicate their purpose."
+            )
 
 
     return findings
